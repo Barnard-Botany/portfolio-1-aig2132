@@ -1,8 +1,11 @@
 ---
 title: "BIEN Data for mapping and biostatistics"
-output: html_notebook
+author: "Abigail I. Gutierrez"
+output:
+  pdf_document: default
+  html_notebook: default
 ---
-
+Part 1: Mapping  
 [BIEN](http://biendata.org)
 
 Today, to build on our previous lesson with BIEN, we will re-visit some of the work we did to be sure proper libraries and some data are loaded. (As you know, no need to re-install.)
@@ -54,7 +57,7 @@ By default, RBIEN commands for species occurrence only downloads limited informa
 - when occurrence happened, country of occurrence, etc.
 
 ```{r}
-Artocarpus_altilis_full <- BIEN_occurrence_species(species = "Artocarpus altilis",cultivated = T,only.new.world = F,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
+Artocarpus_altilis_full <- BIEN_occurrence_species(species = "Artocarpus altilis",cultivated = T,only.new.world = T ,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
 
 str(Artocarpus_altilis_full)
 ```
@@ -117,6 +120,7 @@ head(Breadfruit_DBH_small)
 boxplot(DBH~scrubbed_species_binomial, data=Breadfruit_DBH_small)
 ```
   	
+  	
 ```{r}
 Breadfruit_WPH <- BIEN_trait_traitbygenus(trait = "whole plant height", genus = "Artocarpus")
 str(Breadfruit_WPH)
@@ -169,8 +173,8 @@ class(DBHa)
 
 
 ```{r}
-boxplot(DBHn)
-hist(DBHn)
+boxplot(DBHa)
+hist(DBHa)
 ```
 
 
@@ -231,7 +235,7 @@ Below there is another package being installed into the library and then loaded 
 https://www.statmethods.net/stats/descriptives.html
 
 ```{r}
-install.packages("doBy")
+#install.packages("doBy")
 library(doBy)
 summaryBy(DBH~scrubbed_species_binomial, data=Breadfruit_DBH_small, FUN=c(mean, sd))
 summaryBy(WPH~scrubbed_species_binomial, data=Breadfruit_WPH_small, FUN=c(mean, sd))
@@ -275,6 +279,9 @@ choose two species in the genus Agave (used for fiber, tequila; see Wikipedia)
 # http://www.r-tutor.com/elementary-statistics/inference-about-two-populations/population-mean-between-two-independent-samples
 ttest_result1 = t.test(x=Breadfruit_WPH_small$scrubbed_species_binomial, y=Breadfruit_WPH_small$trait_value, paired=FALSE, alternative="two.sided")
 ttest_result1
+t-test?
+  
+
 ```
 
 # This will prepare you for Digital Lab 2
@@ -325,3 +332,26 @@ tail(OrangeCal_list)
 Before our next digital lab on Feb 22, choose one of the exercises above and complete it. 
 
 Also use this last coding exercise to obtain species lists for three counties in a state in the USA outside of New York. For example, you could start with the county where you attended high school. Or, you could use a county where you have vacationed in the past, or where you would like to visit. Also download data for two adjacent counties. 
+
+
+Before Lab work: 
+1. Colombia 
+```{r}
+Colombia<-BIEN_list_country(country = "Colombia")
+head(Colombia)
+tail(Colombia)
+```
+2. Oaxaca (the state in Mexico that my mom grew up, and place of where my favorite movie Coco takes place)
+```{r}
+Oaxaca <- BIEN_occurrence_state(country="Mexico", state="Oaxaca")
+head(Oaxaca)
+tail(Oaxaca) 
+Oaxaca 
+```
+3. Will do for Manhattan 
+```{r}
+Manhattan <-BIEN_list_county(country = "United States", state="New York", county="Manhattan", native.status=TRUE)
+head(Manhattan)
+tail(Manhattan) 
+```
+

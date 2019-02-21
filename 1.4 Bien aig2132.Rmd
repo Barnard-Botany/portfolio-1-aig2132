@@ -1,0 +1,217 @@
+---
+title: Abigail I. Gutierrez 1.4 
+output: html_notebook
+---
+
+Part 1: Mapping 
+[BIEN](http://biendata.org) 
+
+Mapping and Downloading Data. 
+
+```{r}
+Castanea_dentata <- BIEN_occurrence_species(species = "Castanea dentata")  
+Castanea_dentata 
+
+str(Castanea_dentata)
+head(Castanea_dentata)
+tail (Castanea_dentata) 
+
+```
+
+Now want to get range in map of where the Chestnut Tree resides 
+```{r}
+Castanea_dentata_rangemap <- BIEN_ranges_load_species("Castanea dentata")
+
+Castanea_dentata_rangemap 
+
+# Map the range of chestnut tree
+map('world', fill=T, col="grey", bg = "light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(Castanea_dentata_rangemap, col="green", add=T) 
+
+```
+Now mapping range of occurance 
+```{r}
+# Map the range of chestnut tree + occurence records
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(Castanea_dentata_rangemap, col="green", add=T)
+points(cbind(Castanea_dentata$longitude, Castanea_dentata$latitude), col="blue", pch=20, cex=1) 
+```
+
+Getting more expansive data using more information and expanding the map to the entire world 
+
+```{r}
+
+Castanea_dentata_full <- BIEN_occurrence_species(species = "Castanea dentata",cultivated = T,only.new.world = T,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
+
+Castanea_dentata_full 
+str(Castanea_dentata_full) 
+
+```
+ World Map 
+ The blue defines the original data set and the red is from all of the occurences. 
+ 
+```{r}
+map('world', fill=T , col="grey", bg="light blue")
+
+#Plot the points from the full query in red
+
+points(cbind(Castanea_dentata_full$longitude, Castanea_dentata_full$latitude), col="red", pch=20, cex=1)
+
+# Plot the points from the default query in blue
+points(cbind(Castanea_dentata$longitude, Castanea_dentata$latitude), col="blue", pch=20, cex=1) 
+```
+ Now attempting for a second species. This time I want to do the Common pricklyash. 
+```{r}
+Zanthoxylum_americanum <- BIEN_occurrence_species(species = "Zanthoxylum americanum")  
+Zanthoxylum_americanum
+
+str(Zanthoxylum_americanum)
+head(Zanthoxylum_americanum)
+tail (Zanthoxylum_americanum)  
+```
+ Now want to get range in map of where the Common pricklyash resides  
+```{r}
+Zanthoxylum_americanum_rangemap <- BIEN_ranges_load_species("Zanthoxylum americanum")
+
+Zanthoxylum_americanum_rangemap 
+
+# Map the range of aok tree
+map('world', fill=T, col="grey", bg = "light blue", xlim=c(-180,20),ylim=c(-60,80))
+plot(Zanthoxylum_americanum_rangemap, col="green", add=T)  
+```
+ Now we want to get range of occurance 
+```{r}
+# Map the range of chestnut tree + occurence records
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(Zanthoxylum_americanum_rangemap, col="green", add=T)
+points(cbind(Zanthoxylum_americanum$longitude, Zanthoxylum_americanum$latitude), col="blue", pch=20, cex=1)  
+```
+ Getting more expansive data using more information and expanding the map to the entire world 
+```{r}
+Zanthoxylum_americanum_full <- BIEN_occurrence_species(species = "Zanthoxylum americanum",cultivated = T,only.new.world = T,all.taxonomy = T,native.status = T,observation.type = T,political.boundaries = T)
+
+Zanthoxylum_americanum_full 
+str(Zanthoxylum_americanum_full)  
+```
+
+World Map 
+The blue defines the original data set and the red is from all of the occurences.  
+ 
+```{r}
+map('world', fill=T , col="grey", bg="light blue")
+
+#Plot the points from the full query in red
+
+points(cbind(Zanthoxylum_americanum_full$longitude, Zanthoxylum_americanum_full$latitude), col="red", pch=20, cex=1)
+
+# Plot the points from the default query in blue
+points(cbind(Zanthoxylum_americanum$longitude, Zanthoxylum_americanum$latitude), col="blue", pch=20, cex=1) 
+
+```
+ 
+ Part 2: Trait Data 
+```{r}
+BIEN_trait_list() 
+```
+Creating a data frame of American Chestnut Tree Traits 
+
+```{r}
+Castanea_dentata_traits <- BIEN_trait_genus(genus = "Castanea")
+str(Castanea_dentata_traits)
+Castanea_dentata_traits
+```
+```{r}
+Castanea_dentata_WPH <- BIEN_trait_traitbygenus(trait = "whole plant height", genus = "Castanea")
+head(Castanea_dentata_WPH)
+tail(Castanea_dentata_WPH)
+str(Castanea_dentata_WPH)
+
+# List variable names from Breadfruit_DBH data frame
+names(Castanea_dentata_WPH)
+
+Castanea_dentata_WPH_small = Castanea_dentata_WPH[c(1:5)]
+Castanea_dentata_WPH_small
+Castanea_dentata_WPH_small = as.data.frame(Castanea_dentata_WPH_small)
+class(Castanea_dentata_WPH_small)
+head(Castanea_dentata_WPH_small)
+class(Castanea_dentata_WPH_small$trait_value)
+WPH = as.numeric(Castanea_dentata_WPH_small$trait_value)
+
+class(WPH) 
+
+```
+Boxplot 
+```{r}
+#now we will be doing a boxplot
+
+library(lattice)
+head(Castanea_dentata_WPH_small)
+boxplot(WPH~scrubbed_species_binomial, data=Castanea_dentata_WPH_small) 
+```
+
+ Creating another frame for a different trait. 
+```{r}
+Castanea_dentata_DBH <- BIEN_trait_traitbygenus(trait = "diameter at breast height (1.3 m)", genus = "Castanea")
+str(Castanea_dentata_DBH)
+Castanea_dentata_DBH
+
+
+head(Castanea_dentata_DBH)
+tail(Castanea_dentata_DBH)
+str(Castanea_dentata_DBH)
+
+# List variable names from Breadfruit_DBH data frame
+names(Castanea_dentata_DBH)
+
+Castanea_dentata_DBH_small = Castanea_dentata_DBH[c(1:5)]
+Castanea_dentata_DBH_small
+Castanea_dentata_DBH_small = as.data.frame(Castanea_dentata_DBH_small)
+class(Castanea_dentata_DBH_small)
+head(Castanea_dentata_DBH_small)
+class(Castanea_dentata_DBH_small$trait_value)
+DBH = as.numeric(Castanea_dentata_DBH_small$trait_value)
+
+class(DBH) 
+
+head(Castanea_dentata_DBH_small)
+boxplot(DBH~scrubbed_species_binomial, data=Castanea_dentata_DBH_small)  
+
+```
+ 
+ Summary Statistics: 
+ 
+ For this assignment I decided to look at whole plant height and diameter of breast height at 1.3m for Castanea_dentata and I looked at the trait from the genus Castanea. The mean of the diameter of breast height at 1.3m I got a mean of 5.777cm . However for the mean of whole plant height I got a value of 7.608m. There is a 100 fold difference since we are talking about values that differ in m and cm.   
+ 
+```{r}
+mean(DBH, data=Castanea_dentata_DBH_small)
+
+mean(WPH, data=Castanea_dentata_WPH_small)
+
+```
+ 
+ Now I want to do a scatter plot and a histogram using the same traits I have used so far 
+```{r}
+#whp stands for whole plant height 
+boxplot(WHP)
+hist(WPH) 
+
+#DBH is diameter at breast height 
+boxplot(DBH)
+hist(DBH) 
+
+```
+ Now I want to attempt to run a t-test on the data I collected on the whole plant height. I tried to run the test on the trait of whole plant height but I was unable to be 
+```{r}
+
+ttest_result1 = t.test(x=Castanea_dentata_WPH_small$scrubbed_species_binomial, y=Castanea_dentata_WPH_small$trait_value, paired=TRUE, alternative="two.sided")
+ttest_result1 
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
