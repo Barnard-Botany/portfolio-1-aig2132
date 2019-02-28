@@ -207,11 +207,7 @@ ttest_result1 = t.test(x=Castanea_dentata_WPH_small$scrubbed_species_binomial, y
 ttest_result1 
 ```
  
- 
- 
- 
- 
- 
- 
- 
- 
+Great job, Abby! All of your code worked perfectly until the very end on line 195, but that was only because you typed "WHP" instead of "WPH" following the boxplot() function.
+
+Sorry for the t-test frustration. Did you see Hilary's announcement about it on Canvas? https://courseworks2.columbia.edu/courses/76272/discussion_topics/310707
+For full credit, go follow those instructions and then push your code back to GitHub once the t-test part works.
